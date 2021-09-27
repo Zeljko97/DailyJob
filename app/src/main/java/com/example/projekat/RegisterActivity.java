@@ -53,6 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
     ImageButton image;
     ProgressBar progressBar;
     Button btnRegister;
+    TextView haveAccount;
 
     public static String profileImageUri = "";
     private static Bitmap photo = null;
@@ -79,16 +80,17 @@ public class RegisterActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
 
         btnRegister = findViewById(R.id.btnRegister);
+        haveAccount = findViewById(R.id.textHaveAccount);
 
         fAuth = FirebaseAuth.getInstance();
         reff = FirebaseDatabase.getInstance().getReference().child("User");
 
 
-
-        if(fAuth.getCurrentUser() != null) {
+        //ako je korisnik ulogovan
+        /*if(fAuth.getCurrentUser() != null) {
             startActivity(new Intent(getApplicationContext(),HomePageActivity.class));
             finish();
-        }
+        }*/
 
 
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -131,13 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
 
                 //progressBar.setVisibility(View.VISIBLE);
 
-              /*  User user = new User(
-                        _name,
-                        _email,
-                        _phone,
-                        _profession,
-                        profileImageUri);
-                reff.push().setValue(user);*/
+
 
                 //Register the user in firebase
                 fAuth.createUserWithEmailAndPassword(_email,_password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -158,10 +154,11 @@ public class RegisterActivity extends AppCompatActivity {
                                     .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    progressBar.setVisibility(View.GONE);
+
 
                                     if(task.isSuccessful()){
                                         handleUpload();
+                                        progressBar.setVisibility(View.GONE);
                                         Toast.makeText(RegisterActivity.this,"User created",Toast.LENGTH_SHORT).show();
                                     }
                                     else{
@@ -178,6 +175,15 @@ public class RegisterActivity extends AppCompatActivity {
                 });
 
 
+            }
+        });
+
+
+        //already have account
+        haveAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
             }
         });
 
