@@ -3,6 +3,10 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_add_job.xml" value="0.25" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_home_page.xml" value="0.271875" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_login.xml" value="0.33016304347826086" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_register.xml" value="0.33016304347826086" />
         <entry key="..\:/Users/zeljk/AndroidStudioProjects/app/src/main/res/layout/activity_register.xml" value="0.33" />
       </map>
     </option>
