@@ -31,6 +31,8 @@ public class AddJobActivity extends AppCompatActivity {
     Button btnAddLocation;
     Button btnAddJob;
 
+    String lat,lon;
+
     FirebaseAuth fAuth;
     DatabaseReference dRef;
 
@@ -54,6 +56,10 @@ public class AddJobActivity extends AppCompatActivity {
         btnAddLocation = findViewById(R.id.btnAddLocation);
         btnAddJob = findViewById(R.id.btnAddJob);
 
+        //preuzimanje longitude, latitude
+         lat = getIntent().getExtras().getString("Latitude");
+         lon = getIntent().getExtras().getString("Longitude");
+
         //dodavanje spinner kategorije
         ArrayAdapter aa = new ArrayAdapter(this, android.R.layout.simple_spinner_dropdown_item,categories);
         aa.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -74,6 +80,9 @@ public class AddJobActivity extends AppCompatActivity {
                 String _description = description.getText().toString().trim();
                 String _date = date.getText().toString().trim();
                 String _userId = fAuth.getCurrentUser().getUid();
+                double _latitude = Double.parseDouble(lat);
+                double _longitude = Double.parseDouble(lon);
+
 
 
 
@@ -89,6 +98,9 @@ public class AddJobActivity extends AppCompatActivity {
                         _jobName,
                         _category,
                         _description,
+                        _userId,
+                        _longitude,
+                        _latitude,
                         _date
                 );
 

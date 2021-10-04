@@ -25,13 +25,14 @@ public class Job {
 
 
     }
-    public Job(String jobName, String category, String description, double longitude, double latitude, String date){
+    public Job(String jobName, String category, String description, String key,double longitude, double latitude, String date){
         this.jobName = jobName;
         this.category = category;
         this.description = description;
         this.longitude = longitude;
         this.latitude = latitude;
         this.date = date;
+        this.key = key;
 
     }
 

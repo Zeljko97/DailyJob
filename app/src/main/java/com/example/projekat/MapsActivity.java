@@ -3,14 +3,19 @@ package com.example.projekat;
 import static android.content.ContentValues.TAG;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.ButtonBarLayout;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ClipData;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -24,7 +29,10 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -37,8 +45,6 @@ import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.AutocompleteFilter;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.Places;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -54,12 +60,18 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.projekat.databinding.ActivityMapsBinding;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 
 import androidx.appcompat.widget.Toolbar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -72,51 +84,132 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private FusedLocationProviderClient client;
     //Map component, simplest way to place a map in application
     private SupportMapFragment mapFragment;
-    private Location currentLoc;
-    private static final int REQUEST_CODE = 101;
+
+    private int REQUEST_CODE = 111;
+
+    SearchView searchView;
+    SwitchCompat btnAdd;
 
 
 
+
+
+    @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-
-        //initialize FusedLocation
-        client = LocationServices.getFusedLocationProviderClient(this);
-        getCurrentLocation();
-
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        searchView = findViewById(R.id.sv_location);
+
+        mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        //initialize FusedLocation
+        client = LocationServices.getFusedLocationProviderClient(this);
+
+        if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+
+            getCurrentLocation();
+        } else{
+            ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
+        }
+
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                String location = searchView.getQuery().toString();
+                List<Address> addressList = null;
+
+                if (location != null || !location.equals("")){
+                    Geocoder geocoder = new Geocoder(MapsActivity.this);
+                    try{
+                        addressList = geocoder.getFromLocationName(location,1);
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+                    Address address = addressList.get(0);
+                    LatLng latLng = new LatLng(address.getLatitude(),address.getLongitude());
+                    mMap.addMarker(new MarkerOptions().position(latLng).title(location));
+                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,10));
+                    addressList.clear();
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+        mapFragment.getMapAsync(this);
+
 
     }
 
-    //Get Current Location
     private void getCurrentLocation() {
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this,new String[]{
-                    Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE
-            );
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         Task<Location> task = client.getLastLocation();
+
         task.addOnSuccessListener(new OnSuccessListener<Location>() {
             @Override
             public void onSuccess(Location location) {
                 if(location != null){
-                    currentLoc = location;
-                    // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-                    SupportMapFragment supportMapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-                    supportMapFragment.getMapAsync(MapsActivity.this);
+
+                    mapFragment.getMapAsync(new OnMapReadyCallback() {
+                        @Override
+                        public void onMapReady(GoogleMap googleMap) {
+                            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+                            MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Your location");
+
+                            googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,14));
+                            googleMap.addMarker(markerOptions).showInfoWindow();
+                        }
+                    });
                 }
             }
         });
 
     }
+
+    private void setOnMapClickListener(){
+        if(mMap!=null) {
+            mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+                @Override
+                public void onMapClick(LatLng latLng) {
+
+                    String lon = Double.toString(latLng.longitude);
+                    String lat = Double.toString(latLng.latitude);
+                    Intent locationIntent = new Intent();
+                    locationIntent.putExtra("lon", lon);
+                    locationIntent.putExtra("lat", lat);
+                    setResult(Activity.RESULT_OK, locationIntent);
+
+
+                    Toast.makeText(getApplicationContext(), lon + " : " + lat, Toast.LENGTH_SHORT).show();
+                    Intent i = new Intent(getApplicationContext(),AddJobActivity.class);
+                    i.putExtra("Longitude",lon);
+                    i.putExtra("Latitude", lat);
+                    startActivity(i);
+
+                    finish();
+                }
+            });
+        }
+    }
+
     //Marker icon
     //BitmapDescriptor defines a Bitmap Image, in this case, class is used to set image of the marker icon, or color.
     public BitmapDescriptor getMarkerIcon(String color){
@@ -128,63 +221,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        LatLng latLng = new LatLng(currentLoc.getLatitude(),currentLoc.getLongitude());
-        MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Your location");
-//        mMap.animateCamera(CameraUpdateFactory.newLatLng(latLng));
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng,12));
-        mMap.addMarker(markerOptions);
+
+
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        switch (requestCode) {
-            case REQUEST_CODE:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getCurrentLocation();
-                }
-                break;
+
+        if(requestCode == REQUEST_CODE) {
+            if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                getCurrentLocation();
+            }
+        } else {
+            Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT).show();
         }
+
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
 
-        //search button toolbar, dynamically created
-        MenuItem menuItem = menu.findItem(R.id.search);
-        SearchView searchView = (SearchView) menuItem.getActionView();
-        searchView.setQueryHint("Type here to search");
-
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        MenuItem menuItem = menu.findItem(R.id.add2);
+        menuItem.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
-            public boolean onQueryTextSubmit(String s) {
-
-                String location = searchView.getQuery().toString();
-                List<Address> addressList = new ArrayList<>();
-
-                if (location != null || location.equals("")) {
-                    Geocoder geocoder = new Geocoder(MapsActivity.this);
-
-                    try {
-                        addressList = geocoder.getFromLocationName(location, 1);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    Address address = addressList.get(0);
-                    LatLng latLng = new LatLng(address.getLatitude(), address.getLongitude());
-                    mMap.addMarker(new MarkerOptions().position(latLng).title(location));
-                    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 10));
-
-                }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String s) {
+            public boolean onMenuItemClick(MenuItem menuItem) {
+                setOnMapClickListener();
                 return false;
             }
         });
+
         return true;
 
     }
@@ -200,7 +267,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         return true;
     }
-
 
 
 }

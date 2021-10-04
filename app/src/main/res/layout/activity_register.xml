@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/architects_daughter"
         android:text="Create Account"
+        android:textColor="@color/teal_700"
         android:textSize="34sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -85,13 +86,13 @@
         android:layout_width="130dp"
         android:layout_height="130dp"
         android:background="@drawable/cameraicon"
+        android:onClick="handleImageClick"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView"
-        app:layout_constraintVertical_bias="0.01999998"
-        android:onClick="handleImageClick"/>
+        app:layout_constraintVertical_bias="0.01999998" />
 
     <Button
         android:id="@+id/btnRegister"
@@ -142,12 +143,12 @@
         android:id="@+id/textHaveAccount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:clickable="true"
         android:text="Already have an account? Log in"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnRegister"
-        android:clickable="true"/>
+        app:layout_constraintTop_toBottomOf="@+id/btnRegister" />
 
     <ProgressBar
         android:id="@+id/progressBar"
