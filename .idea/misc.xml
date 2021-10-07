@@ -3,14 +3,31 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/drawable/ic_add.xml" value="0.2109375" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/drawable/ic_baseline_add_24.xml" value="0.2109375" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2109375" />
         <entry key="..\:/GitHub/DailyJob/app/src/main/res/drawable/ic_menu.xml" value="0.3671875" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/drawable/ic_search.xml" value="0.2109375" />
         <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_add_job.xml" value="0.25" />
-        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_home_page.xml" value="0.271875" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_all_users.xml" value="0.25" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_all_users2.xml" value="0.3278985507246377" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_home_page.xml" value="0.25" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_job_details.xml" value="0.271875" />
         <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_login.xml" value="0.33016304347826086" />
         <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_maps.xml" value="0.35104166666666664" />
         <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_register.xml" value="0.33016304347826086" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/activity_reset_password.xml" value="0.271875" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/adapter_view_layour.xml" value="0.3378623188405797" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/fragment_all_users.xml" value="0.3278985507246377" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/fragment_jobs.xml" value="0.3278985507246377" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/fragment_profile.xml" value="0.22" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/fragment_user.xml" value="0.21875" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/fragment_users.xml" value="0.3278985507246377" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/main_item.xml" value="0.33152173913043476" />
         <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/toolbar.xml" value="0.35104166666666664" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/layout/user_item.xml" value="0.3278985507246377" />
         <entry key="..\:/GitHub/DailyJob/app/src/main/res/menu/menu.xml" value="0.35104166666666664" />
+        <entry key="..\:/GitHub/DailyJob/app/src/main/res/menu/popup_manu.xml" value="0.19479166666666667" />
         <entry key="..\:/Users/zeljk/AndroidStudioProjects/app/src/main/res/layout/activity_register.xml" value="0.33" />
       </map>
     </option>

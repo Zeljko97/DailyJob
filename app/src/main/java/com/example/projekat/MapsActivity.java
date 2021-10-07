@@ -53,6 +53,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
@@ -92,8 +93,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
-
-
     @SuppressLint("ResourceType")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,10 +108,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //initialize FusedLocation
         client = LocationServices.getFusedLocationProviderClient(this);
 
+
+
+
         if (ActivityCompat.checkSelfPermission(MapsActivity.this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
 
+            if(getIntent().getExtras() != null)
+            {
+                getJobLocation();
+            } else{
             getCurrentLocation();
+            }
         } else{
             ActivityCompat.requestPermissions(MapsActivity.this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},REQUEST_CODE);
         }
@@ -183,6 +190,29 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
     }
+
+    private void getJobLocation(){
+        double lat = getIntent().getExtras().getDouble("latitude");
+        double lon = getIntent().getExtras().getDouble("longitude");
+
+        mapFragment.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                LatLng latLng = new LatLng(lat,lon);
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(latLng)
+                        .zoom(17).build();
+                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                MarkerOptions markerOptions = new MarkerOptions().position(latLng).title("Job location");
+                googleMap.addMarker(markerOptions).showInfoWindow();
+            }
+        });
+
+
+
+    }
+
 
     private void setOnMapClickListener(){
         if(mMap!=null) {

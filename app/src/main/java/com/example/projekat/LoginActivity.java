@@ -22,6 +22,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.messaging.FirebaseMessaging;
 
+import org.w3c.dom.Text;
+
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -30,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText textPassword;
     TextView register;
     ProgressBar progressBarL;
+    TextView resetPassword;
 
     FirebaseAuth fAuth;
     DatabaseReference dRef;
@@ -44,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         textPassword = findViewById(R.id.textPasswordL);
         register = findViewById(R.id.textRegister);
         progressBarL = findViewById(R.id.progressBarL);
+        resetPassword = findViewById(R.id.txtResetPassword);
 
 
         fAuth = FirebaseAuth.getInstance();
@@ -101,6 +105,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
+            }
+        });
+
+        //forgot password
+        resetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(LoginActivity.this,ResetPasswordActivity.class));
             }
         });
     }

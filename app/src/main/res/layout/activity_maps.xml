@@ -49,6 +49,7 @@
         android:layout_height="32dp"
 
 
+        android:background="@color/teal_700"
         android:elevation="5dp"
         android:iconifiedByDefault="false"
         android:queryHint="Search..."
