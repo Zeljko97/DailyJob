@@ -60,6 +60,7 @@ public class MainAdapter extends FirebaseRecyclerAdapter<MainModel,MainAdapter.m
         TextView jobName,date,category,description;
         Context context;
         String userId;
+        String jobId;
         double latitude;
         double longitude;
 
@@ -74,6 +75,7 @@ public class MainAdapter extends FirebaseRecyclerAdapter<MainModel,MainAdapter.m
             description = (TextView) itemView.findViewById(R.id.description);
             this.context = context;
             userId = "";
+            jobId = "";
             latitude = 0;
             longitude = 0;
 

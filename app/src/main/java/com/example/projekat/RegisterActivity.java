@@ -237,6 +237,7 @@ public class RegisterActivity extends AppCompatActivity {
                         baza.child("User").child(userId).child("profileImageUri").setValue(profImgUri);
 
                         fAuth.signOut();
+
                         startActivity(new Intent(getApplicationContext(), HomePageActivity.class));
 
                     }

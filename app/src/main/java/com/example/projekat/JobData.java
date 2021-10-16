@@ -81,6 +81,7 @@ public class JobData {
         String key = database.push().getKey();
         //Prvo se od od Firebase baze podataka pribavi kljuc, koji ce biti dodeljen elementu
         //postaviti odgovarajuci atribut key i dodati par kljuc-indeks u HashMap a zatim dodati objekat u bazu
+
         jobs.add(job);
         jobsKeyIndexMapping.put(key,jobs.size()-1);
         database.child(FIREBASE_CHILD).child(key).setValue(job);

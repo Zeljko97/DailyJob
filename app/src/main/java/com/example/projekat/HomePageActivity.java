@@ -19,6 +19,8 @@ import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,9 +34,10 @@ public class HomePageActivity extends AppCompatActivity implements AdapterView.O
 
     private RecyclerView recyclerView;
     MainAdapter mainAdapter1;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference,dRef;
     private Spinner spinner;
-
+FirebaseAuth firebaseAuth;
+String idUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,10 @@ public class HomePageActivity extends AppCompatActivity implements AdapterView.O
        spinner.setOnItemSelectedListener(this);
 
        databaseReference = FirebaseDatabase.getInstance().getReference().child("Job");
+
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        idUser = user.getUid();
 
        /* FirebaseRecyclerOptions<MainModel> options =
                 new FirebaseRecyclerOptions.Builder<MainModel>()
@@ -73,7 +80,7 @@ public class HomePageActivity extends AppCompatActivity implements AdapterView.O
     @Override
     protected void onStop() {
         super.onStop();
-        mainAdapter1.stopListening();
+//         mainAdapter1.stopListening();
     }
 
     private void getCategories(){
@@ -110,10 +117,14 @@ public class HomePageActivity extends AppCompatActivity implements AdapterView.O
     private void LoadFromDatabase(String text){
 
 
+
                 FirebaseRecyclerOptions<MainModel> options =
                         new FirebaseRecyclerOptions.Builder<MainModel>()
                                 .setQuery(FirebaseDatabase.getInstance().getReference().child("Job").orderByChild("category").equalTo(text), MainModel.class)
                                 .build();
+
+
+
 
                  mainAdapter1 = new MainAdapter(options);
                 recyclerView.setAdapter(mainAdapter1);
@@ -154,6 +165,9 @@ public class HomePageActivity extends AppCompatActivity implements AdapterView.O
             case R.id.itemProfile:
                 startActivity(new Intent(getApplicationContext(),AllUsersActivity.class));
                 return true;
+            case R.id.itemJobs:
+               // startActivity(new Intent(getApplicationContext(),JobDealDetailsAcitivity.class));
+                //return true;
             default:
                 return false;
         }

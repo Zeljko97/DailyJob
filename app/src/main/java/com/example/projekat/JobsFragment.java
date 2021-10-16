@@ -11,17 +11,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class JobsFragment extends Fragment {
 
     private RecyclerView rv;
     private DatabaseReference databaseReference;
-    MainAdapter mainAdapter;
+    JobDealAdapter mainAdapter;
+
+
+    DatabaseReference ref,jobDealReference;
+       FirebaseAuth firebaseAuth;
+      String idUser;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -32,7 +44,34 @@ public class JobsFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getActivity()));
 
 
-        LoadFromDatabase();
+        //trenutno prijavljeni user
+        firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        idUser = user.getUid();
+
+
+
+
+        jobDealReference = FirebaseDatabase.getInstance().getReference().child("JobDeal");
+
+        LoadFromDatabase(idUser);
+
+/*        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                idUser = databaseReference.getKey().toString();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+*/
+
+
+
+
 
         // Inflate the layout for this fragment
        // return inflater.inflate(R.layout.fragment_jobs, container, false);
@@ -46,15 +85,18 @@ public class JobsFragment extends Fragment {
 
     }
 
-    private void LoadFromDatabase(){
+    private void LoadFromDatabase(String id){
 
-
-        FirebaseRecyclerOptions<MainModel> options =
-                new FirebaseRecyclerOptions.Builder<MainModel>()
-                        .setQuery(FirebaseDatabase.getInstance().getReference().child("Job"), MainModel.class)
+        //ucitavaju se poslovi za koje je user aplicirao i dobio
+        Toast.makeText(getContext(),id, Toast.LENGTH_SHORT).show();
+        FirebaseRecyclerOptions<JobDeal> options =
+                new FirebaseRecyclerOptions.Builder<JobDeal>()
+                        .setQuery(FirebaseDatabase.getInstance().getReference().child("JobDeal").orderByChild("secondUser").equalTo(id), JobDeal.class)
                         .build();
 
-        mainAdapter = new MainAdapter(options);
+
+
+        mainAdapter = new JobDealAdapter(options);
         rv.setAdapter(mainAdapter);
 
         mainAdapter.startListening();

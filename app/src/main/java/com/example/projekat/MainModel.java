@@ -10,6 +10,7 @@ public class MainModel {
     public MainModel(){}
 
 
+
     public MainModel(String jobName, String date, String description, String category, String key, double latitude, double longitude) {
         this.jobName = jobName;
         this.date = date;
@@ -18,6 +19,7 @@ public class MainModel {
         this.key = key;
         this.latitude = latitude;
         this.longitude = longitude;
+
     }
 
     public String getJobName() {
