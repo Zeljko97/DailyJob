@@ -1,9 +1,30 @@
 package com.example.projekat;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RequestJob {
 
     public String user;
+    public String jobKey;
+
+    public String getUser() {
+        return user;
+    }
+
     public String key;
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public String getJobKey() {
+        return jobKey;
+    }
+
+    public void setJobKey(String jobKey) {
+        this.jobKey = jobKey;
+    }
 
     public String getKey() {
         return key;
@@ -17,15 +38,10 @@ public class RequestJob {
 
     }
 
-    public RequestJob(String key,String user){
-        this.key = key;
+    public RequestJob(String jobKey,String user){
         this.user = user;
-    }
-    public String getUser() {
-        return user;
+        this.jobKey = jobKey;
     }
 
-    public void setUser(String user) {
-        this.user = user;
-    }
+
 }

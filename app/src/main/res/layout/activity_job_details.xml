@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
     tools:context=".JobDetailsActivity">
 
 
@@ -13,70 +12,72 @@
         android:layout_width="224dp"
         android:layout_height="33dp"
         android:text="User name"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.165"
+        app:layout_constraintHorizontal_bias="0.155"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView11"
-        app:layout_constraintVertical_bias="0.051" />
+        app:layout_constraintVertical_bias="0.073" />
 
     <TextView
         android:id="@+id/txtJobName"
-        android:layout_width="136dp"
-        android:layout_height="37dp"
+        android:layout_width="185dp"
+        android:layout_height="34dp"
         android:text="JobName"
-        android:textColor="@color/black"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.060000002" />
-
-    <TextView
-        android:id="@+id/txtDate"
-        android:layout_width="136dp"
-        android:layout_height="36dp"
-        android:text="Date"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintHorizontal_bias="0.128"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.111" />
+
+    <TextView
+        android:id="@+id/txtDate"
+        android:layout_width="185dp"
+        android:layout_height="34dp"
+        android:text="Date"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.137"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtJobName"
-        app:layout_constraintVertical_bias="0.050000012" />
+        app:layout_constraintVertical_bias="0.083" />
 
     <TextView
         android:id="@+id/txtDescription"
         android:layout_width="330dp"
         android:layout_height="122dp"
         android:text="Descritption"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.333"
+        app:layout_constraintHorizontal_bias="0.382"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDate"
-        app:layout_constraintVertical_bias="0.144" />
+        app:layout_constraintVertical_bias="0.149" />
 
     <TextView
         android:id="@+id/textView10"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="111dp"
+        android:layout_height="29dp"
         android:layout_marginTop="22dp"
+        android:fontFamily="@font/architects_daughter"
         android:text="Description"
-        android:textColor="@color/black"
+        android:textColor="@color/teal_700"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.08"
+        app:layout_constraintHorizontal_bias="0.096"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDate"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.002" />
 
     <TextView
         android:id="@+id/textView11"
@@ -87,29 +88,31 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.11"
+        app:layout_constraintHorizontal_bias="0.103"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDescription"
-        app:layout_constraintVertical_bias="0.13" />
+        app:layout_constraintVertical_bias="0.064" />
 
     <TextView
         android:id="@+id/txtCategory"
         android:layout_width="178dp"
         android:layout_height="31dp"
+        android:fontFamily="@font/architects_daughter"
         android:text="Category"
-        android:textColor="@color/black"
-        android:textSize="16sp"
+        android:textColor="@color/teal_700"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.858"
+        app:layout_constraintHorizontal_bias="0.918"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtDate"
-        app:layout_constraintVertical_bias="0.019" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.022" />
 
     <Button
         android:id="@+id/btnLocation"
         android:layout_width="164dp"
         android:layout_height="49dp"
+        android:background="@color/teal_700"
         android:text="View location"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -121,7 +124,8 @@
     <Button
         android:id="@+id/btnAplyForJob"
         android:layout_width="189dp"
-        android:layout_height="84dp"
+        android:layout_height="49dp"
+        android:background="@color/teal_700"
         android:text="Aply for job"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -129,29 +133,59 @@
         app:layout_constraintTop_toBottomOf="@+id/btnLocation"
         app:layout_constraintVertical_bias="0.241" />
 
+
     <Button
         android:id="@+id/btnDeclineJob"
-        android:layout_width="175dp"
-        android:layout_height="69dp"
+        android:layout_width="189dp"
+        android:layout_height="49dp"
         android:layout_marginTop="28dp"
+        android:background="@color/teal_700"
         android:text="Cancel request"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnAplyForJob"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/txtApp"
-        android:layout_width="137dp"
-        android:layout_height="33dp"
-        android:layout_marginTop="166dp"
-        android:background="@color/places_autocomplete_search_hint"
-        android:text="TextView"
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/architects_daughter"
+        android:text="Job name:"
+        android:textColor="@color/teal_700"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.879"
+        app:layout_constraintHorizontal_bias="0.087"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtDescription"
-        app:layout_constraintVertical_bias="0.08" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.061" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="76dp"
+        android:layout_height="22dp"
+        android:fontFamily="@font/architects_daughter"
+        android:text="Date:"
+        android:textColor="@color/teal_700"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.087"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtJobName"
+        app:layout_constraintVertical_bias="0.028" />
+
+    <Button
+        android:id="@+id/btnEmployees"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.82"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtUserId"
+        app:layout_constraintVertical_bias="0.141" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -18,12 +19,18 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
         <activity
+            android:name=".Employees"
+            android:exported="true" />
+        <activity
+            android:name=".MapsTracker"
+            android:exported="true"></activity>
+        <activity
             android:name=".JobDealDetailsAcitivity"
             android:exported="true"
-            android:launchMode="singleTask"/>
+            android:launchMode="singleTask" />
         <activity
             android:name=".AllUsersActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".ResetPasswordActivity"
             android:exported="true" />
@@ -64,7 +71,7 @@
         </activity>
         <activity
             android:name=".HomePageActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".RegisterActivity"
             android:exported="true" />

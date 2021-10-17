@@ -34,7 +34,7 @@ public class JobDetailsActivity extends AppCompatActivity {
 
     TextView txtJobName, txtDate,txtDescription,txtCategory,txtUser,txtApp;
     Button btnLocation;
-    Button btnApply, btnCancel;
+    Button btnApply, btnCancel, btnEmployees;
     String CurrentState ="nothing_happened";
 
     public static  String jobId="";
@@ -52,6 +52,10 @@ public class JobDetailsActivity extends AppCompatActivity {
     FirebaseUser firebaseUser;
 
     String id;
+    String jobName;
+    String date;
+    String description;
+    String category;
 
     String description11;
 
@@ -92,10 +96,10 @@ public class JobDetailsActivity extends AppCompatActivity {
 
 
         id = getIntent().getExtras().getString("userId");
-        String jobName = getIntent().getExtras().getString("jobName");
-        String date = getIntent().getExtras().getString("date");
-        String description = getIntent().getExtras().getString("description");
-        String category = getIntent().getExtras().getString("category");
+        jobName = getIntent().getExtras().getString("jobName");
+         date = getIntent().getExtras().getString("date");
+         description = getIntent().getExtras().getString("description");
+        category = getIntent().getExtras().getString("category");
 
         txtJobName = (TextView) findViewById(R.id.txtJobName);
         txtJobName.setText(jobName);
@@ -106,7 +110,7 @@ public class JobDetailsActivity extends AppCompatActivity {
         txtCategory = (TextView) findViewById(R.id.txtCategory);
         txtCategory.setText(category);
         txtUser = (TextView)findViewById(R.id.txtUserId);
-        txtApp = (TextView)findViewById(R.id.txtApp);
+        //txtApp = (TextView)findViewById(R.id.txtApp);
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("User").child(id);
 
@@ -118,6 +122,7 @@ public class JobDetailsActivity extends AppCompatActivity {
 
         btnApply = (Button)findViewById(R.id.btnAplyForJob);
         btnCancel = (Button)findViewById(R.id.btnDeclineJob);
+        btnEmployees = (Button)findViewById(R.id.btnEmployees);
 
 
 
@@ -139,58 +144,10 @@ public class JobDetailsActivity extends AppCompatActivity {
 
 
 //pribavljamo job id koji se sklapa izmedju korisnika
+Init();
 
 
 
-        referenceForJob =  FirebaseDatabase.getInstance().getReference().child("Job").orderByChild("jobName").equalTo(jobName);
-        referenceForJob.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                jobId = snapshot.getKey();
-                ////////////////////////////////////
-
-                requestReference = (DatabaseReference) FirebaseDatabase.getInstance().getReference().child("RequestsJob").child(jobId);
-                requestReference.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        secondUserId = snapshot.child("user").getValue(String.class);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-
-
-
-                ////////////////////////////////////
-                Toast.makeText(JobDetailsActivity.this,jobId,Toast.LENGTH_SHORT).show();
-                LoadJobDeal();
-                ButtonsAction();
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
 
 
 
@@ -240,6 +197,107 @@ public class JobDetailsActivity extends AppCompatActivity {
             }
         });
     }
+
+
+    private void Init(){
+        referenceForJob =  FirebaseDatabase.getInstance().getReference().child("Job").orderByChild("jobName").equalTo(jobName);
+        referenceForJob.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                jobId = snapshot.getKey();
+                ////////////////////////////////////
+
+
+                Query dbRef;
+                dbRef = FirebaseDatabase.getInstance().getReference().child("RequestsJob").orderByChild("jobKey").equalTo(jobId);
+
+                dbRef.addChildEventListener(new ChildEventListener() {
+                    @Override
+                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        //id request job-a
+                        String requestJobId = snapshot.getKey();
+                        secondUserId = snapshot.child("user").getValue(String.class);
+
+
+
+                        requestReference = (DatabaseReference) FirebaseDatabase.getInstance().getReference().child("RequestsJob").child(requestJobId);
+                        requestReference.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                LoadJobDeal();
+                                ButtonsAction();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+                //ako jos nema zahteva u bazi
+                if(secondUserId.equals("")){
+                    LoadJobDeal();
+                    ButtonsAction();
+                }
+
+
+                ////////////////////////////////////
+                Toast.makeText(JobDetailsActivity.this, jobId, Toast.LENGTH_SHORT).show();
+
+
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+
+
+
+
 
     private void LoadJobDeal() {
         jobreference.child(jobId).child("firstUser").addValueEventListener(new ValueEventListener() {
@@ -312,53 +370,55 @@ public class JobDetailsActivity extends AppCompatActivity {
     private void CheckUserExistance(String id){
 
         if(!(kreiraoPosaoId.equals(""))){
-            //da li je sklopljen posao
-            if(kreiraoPosaoId.equals(firebaseUser.getUid().toString())){
-                CurrentState = "jobs";
-                btnApply.setText("Send SMS");
-                btnCancel.setText("Cancel job");
-                btnCancel.setVisibility(View.VISIBLE);
-            } //ista provera, menjamo id-je
-            else {
-                if(zatrazioPosaoId.equals(firebaseUser.getUid().toString())){
 
+                //da li je sklopljen posao
+                if (kreiraoPosaoId.equals(firebaseUser.getUid().toString())) {
                     CurrentState = "jobs";
                     btnApply.setText("Send SMS");
                     btnCancel.setText("Cancel job");
                     btnCancel.setVisibility(View.VISIBLE);
+                } //ista provera, menjamo id-je
+                else {
+                    if (zatrazioPosaoId.equals(firebaseUser.getUid().toString())) {
 
+                        CurrentState = "jobs";
+                        btnApply.setText("Send SMS");
+                        btnCancel.setText("Cancel job");
+                        btnCancel.setVisibility(View.VISIBLE);
+                    }
 
                 }
-
-            }
         }
-
 
 
         ///da li smo poslali zahtev
         if(secondUserId  != null) {
             if (!(secondUserId.equals(""))) {
                 if (firebaseUser.getUid().equals(secondUserId)) {
-                    requestReference.addValueEventListener(new ValueEventListener() {
+
+
+                    requestReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             String user = snapshot.child("user").getValue(String.class);
-                            if (user.equals(firebaseUser.getUid())) {
+                            if(user != null) {
+                                if (user.equals(firebaseUser.getUid())) {
 
-                                String status = snapshot.child("status").getValue(String.class);
-                                if (status.equals("pending")) {
+                                    //  String status = snapshot.child("status").getValue(String.class);
+                                    //  if (status.equals("pending")) {
                                     CurrentState = "I_sent_pending";
                                     btnApply.setText("Cancel Job Request");
                                     btnCancel.setVisibility(View.GONE);
 
-                                }
-                                if (status.equals("decline")) {
-                                    CurrentState = "I_sent_decline";
-                                    btnApply.setText("Cancel Job Request");
-                                    btnCancel.setVisibility(View.GONE);
+                                    //  }
+                                    //   if (status.equals("decline")) {
+                                    //       CurrentState = "I_sent_decline";
+                                    //      btnApply.setText("Cancel Job Request");
+                                    //      btnCancel.setVisibility(View.GONE);
+
+                                    //  }
 
                                 }
-
                             }
                         }
 
@@ -371,36 +431,64 @@ public class JobDetailsActivity extends AppCompatActivity {
                     //menjamo id
 
                     if (firebaseUser.getUid().equals(id)) {
-                        requestReference.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                String user = snapshot.child("user").getValue(String.class);
-                                if (user != null && user.equals(secondUserId)) {
-//                                if (snapshot.child("status").getValue().toString().equals("pending")) {
-                                    CurrentState = "he_sent_pending";
-                                    btnApply.setText("Accept Job Request");
-                                    btnCancel.setText("Decline job Request");
-                                    btnApply.setVisibility(View.VISIBLE);
-                                    btnCancel.setVisibility(View.VISIBLE);
 
-                                    // }
-                                } else{
-                                if(CurrentState.equals("nothing_happened")) {
-                                    btnApply.setVisibility(View.GONE);
-                                    btnCancel.setVisibility(View.GONE);
-                                }
-                            }
-                            }
-
+                        btnEmployees.setVisibility(View.VISIBLE);
+                        btnEmployees.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                            public void onClick(View view) {
+
+                                Intent intent = new Intent(JobDetailsActivity.this,Employees.class);
+                                intent.putExtra("jobId",jobId);
+                                intent.putExtra("jobName", jobName);
+                                intent.putExtra("date",date);
+                                intent.putExtra("description",description);
+                                intent.putExtra("category",category);
+                                intent.putExtra("userId", id);
+                                startActivity(intent);
 
                             }
                         });
+
+                        //koji zahtev ce da prihvati
+                        if(getIntent().getExtras().getString("employee") != null) {
+
+                            String user = getIntent().getExtras().getString("employee");
+                            if (user != null ) {
+                                secondUserId = user;
+                                CurrentState = "he_sent_pending";
+                                btnApply.setText("Accept Job Request");
+                                btnCancel.setText("Decline job Request");
+                                btnApply.setVisibility(View.VISIBLE);
+                                btnCancel.setVisibility(View.VISIBLE);
+
+                            }
+
+                          /*  requestReference.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    //String user = snapshot.getValue(String.class);
+                                    String user = getIntent().getExtras().getString("employee");
+                                    for(DataSnapshot dataSnapshot : snapshot)
+
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });*/
+                        }
                     }
                 }
             }
         }
+        if(CurrentState.equals("nothing_happened") && firebaseUser.getUid().equals(id)) {
+            btnApply.setVisibility(View.GONE);
+            btnCancel.setVisibility(View.GONE);
+        }
+
+
+
     }
 
 
@@ -428,7 +516,8 @@ public class JobDetailsActivity extends AppCompatActivity {
             btnApply.setText("Cancel Job Request");
             CurrentState = "I_sent_pending";
 
-            requestReference.child("status").setValue("pending");
+          Init();
+         //   requestReference.child("status").setValue("pending");
             return;
 
         }
@@ -472,7 +561,52 @@ public class JobDetailsActivity extends AppCompatActivity {
                         btnCancel.setText("Cancel job");
                         btnCancel.setVisibility(View.VISIBLE);
 
-                        requestReference.removeValue();
+
+                        //requestReference.removeValue();
+
+                        Query req = FirebaseDatabase.getInstance().getReference().child("RequestsJob").orderByChild("jobKey").equalTo(getIntent().getExtras().getString("jobId"));
+                        req.addChildEventListener(new ChildEventListener() {
+                            @Override
+                            public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                                String reqId = snapshot.getKey();
+
+                                DatabaseReference reqRef = FirebaseDatabase.getInstance().getReference().child("RequestsJob").child(reqId);
+                                reqRef.addValueEventListener(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                        reqRef.removeValue();
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                    }
+                                });
+                            }
+
+                            @Override
+                            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                            }
+
+                            @Override
+                            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                            }
+
+                            @Override
+                            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+                        //brisemo i ostale zahteve za ovaj posao kada smo jedan prihvatili
+
 
                         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Job").child(jobId);
      /*   Toast.makeText(JobDetailsActivity.this,nameJob,Toast.LENGTH_SHORT).show();
@@ -489,7 +623,7 @@ public class JobDetailsActivity extends AppCompatActivity {
                         intent.putExtra("longitude",longitude);
                         startActivity(intent);
 
-                        //showJobDealDetails(nameJob, latitude, longitude, description11);
+                        showJobDealDetails(nameJob, latitude, longitude, description11);
                     }
 
                     @Override

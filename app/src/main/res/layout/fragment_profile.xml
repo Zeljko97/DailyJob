@@ -9,10 +9,10 @@
     <!-- TODO: Update blank fragment layout -->
 
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imgProfile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="221dp"
+        android:layout_height="207dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -25,38 +25,70 @@
         android:id="@+id/txtNameProfil"
         android:layout_width="228dp"
         android:layout_height="53dp"
-        android:text="TextView"
+        android:text="       TextView"
+        android:textColor="@color/teal_700"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imgProfile"
-        app:layout_constraintVertical_bias="0.128" />
+        app:layout_constraintVertical_bias="0.127" />
 
     <TextView
         android:id="@+id/txtProfessionProfile"
-        android:layout_width="178dp"
-        android:layout_height="35dp"
+        android:layout_width="231dp"
+        android:layout_height="39dp"
         android:text="TextView"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.099"
+        app:layout_constraintHorizontal_bias="0.133"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtNameProfil"
-        app:layout_constraintVertical_bias="0.146" />
+        app:layout_constraintVertical_bias="0.253" />
 
     <TextView
         android:id="@+id/txtPhoneNumberProfile"
-        android:layout_width="177dp"
-        android:layout_height="38dp"
+        android:layout_width="231dp"
+        android:layout_height="39dp"
         android:text="TextView"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.102"
+        app:layout_constraintHorizontal_bias="0.127"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtProfessionProfile"
-        app:layout_constraintVertical_bias="0.134" />
+        app:layout_constraintVertical_bias="0.394" />
+
+    <TextView
+        android:id="@+id/textView18"
+        android:layout_width="139dp"
+        android:layout_height="26dp"
+        android:fontFamily="@font/architects_daughter"
+        android:text="Profession:"
+        android:textColor="@color/teal_700"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.084"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtNameProfil"
+        app:layout_constraintVertical_bias="0.133" />
+
+    <TextView
+        android:id="@+id/textView19"
+        android:layout_width="139dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="36dp"
+        android:fontFamily="@font/architects_daughter"
+        android:text="Phone:"
+        android:textColor="@color/teal_700"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.088"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/txtProfessionProfile"
+        app:layout_constraintVertical_bias="0.043" />
 </androidx.constraintlayout.widget.ConstraintLayout>

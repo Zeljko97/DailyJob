@@ -71,12 +71,12 @@ public class RequestJobData {
 
 
     public void addNewRequest(RequestJob requestJob){
-        //String key = database.push().getKey();
+        String key = database.push().getKey();
 
         requests.add(requestJob);
-        requestsKeyIndexMapping.put(requestJob.key,requests.size()-1);
-        database.child(FIREBASE_CHILD).child(requestJob.key).setValue(requestJob);
-       // requestJob.key = key;
+        requestsKeyIndexMapping.put(key,requests.size()-1);
+        database.child(FIREBASE_CHILD).child(key).setValue(requestJob);
+        requestJob.key = key;
     }
     public void deleteRequest(int index){
         database.child(FIREBASE_CHILD).child(requests.get(index).key).removeValue();

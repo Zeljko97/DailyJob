@@ -1,6 +1,7 @@
 package com.example.projekat;
 
 import android.content.Context;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
+import com.squareup.picasso.Picasso;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -28,6 +30,11 @@ public class UserAdapter extends FirebaseRecyclerAdapter<UsersModel,UserAdapter.
         viewHolder.phoneNumber.setText(model.getPhoneNumber());
         viewHolder.email.setText(model.getEmail());
         viewHolder.profession.setText(model.getProfession());
+
+        String name = model.getName();
+      String img = model.getProfileImageUri();
+
+      viewHolder.setImg(img);
     }
 
     @NonNull
@@ -36,6 +43,8 @@ public class UserAdapter extends FirebaseRecyclerAdapter<UsersModel,UserAdapter.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_item,parent,false);
         return new vHolder(view,view.getContext());
     }
+
+
 
 
     class vHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
@@ -55,11 +64,18 @@ public class UserAdapter extends FirebaseRecyclerAdapter<UsersModel,UserAdapter.
 
             itemView.setOnClickListener(this);
             itemView.setClickable(true);
+
+
         }
 
         @Override
         public void onClick(View view) {
 
+        }
+
+        public void setImg(String pom){
+            Uri myUri = Uri.parse(pom);
+            Picasso.get().load(myUri).into(img);
         }
     }
 

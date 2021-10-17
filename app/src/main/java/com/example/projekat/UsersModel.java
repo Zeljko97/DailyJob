@@ -2,16 +2,19 @@ package com.example.projekat;
 
 public class UsersModel {
 
-    String email,name,phoneNumber,profession;
+    String email,name,phoneNumber,profession,profileImageUri;
 
     public UsersModel(){
 
     }
-    public UsersModel(String email, String name, String phoneNumber,String profession){
+
+
+    public UsersModel(String email, String name, String phoneNumber, String profession, String profileImageUri){
         this.email = email;
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.profession = profession;
+        this.profileImageUri = profileImageUri;
     }
 
     public String getEmail() {
@@ -45,4 +48,13 @@ public class UsersModel {
     public void setProfession(String profession) {
         this.profession = profession;
     }
+
+    public String getProfileImageUri() {
+        return profileImageUri;
+    }
+
+    public void setProfileImageUri(String profileImageUri) {
+        this.profileImageUri = profileImageUri;
+    }
+
 }

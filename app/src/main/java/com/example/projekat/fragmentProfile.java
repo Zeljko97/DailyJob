@@ -34,8 +34,11 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
+
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 
 
 public class fragmentProfile extends Fragment {
@@ -70,10 +73,19 @@ DatabaseReference databaseReference;
                 String _name = snapshot.child("name").getValue(String.class);
                 String _profession = snapshot.child("profession").getValue(String.class);
                 String _phoneNumber = snapshot.child("phoneNumber").getValue(String.class);
+                String _image = snapshot.child("profileImageUri").getValue(String.class);
 
                 name.setText(_name);
                 profession.setText(_profession);
                 phoneNumber.setText(_phoneNumber);
+
+
+                Uri myUri = Uri.parse(_image);
+                profileImageView.setImageURI(myUri);
+                Picasso.get().load(myUri).into(profileImageView);
+
+
+
             }
 
             @Override
