@@ -1,7 +1,7 @@
 package com.example.projekat;
 
 import android.content.Context;
-import android.content.Intent;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +10,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.projekat.Classes.RequestJob;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
@@ -17,8 +18,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RequestsAdapter extends FirebaseRecyclerAdapter<RequestJob,RequestsAdapter.myViewHolder> {
 
@@ -67,13 +66,7 @@ public class RequestsAdapter extends FirebaseRecyclerAdapter<RequestJob,Requests
 
 
 
-        /*Glide.with(viewHolder.img.getContext())
-        .load(model.getSurl())
-                .placeHolder(R.drawable.common_google_signin_btn_icon_dark)
-                .cirlceCrop()
-                .error(R.drawable.common_google_signin_btn_icon_dark_normal)
-                .into(viewHolder.img);
-*/
+
     }
 
     @Override
@@ -115,18 +108,10 @@ public class RequestsAdapter extends FirebaseRecyclerAdapter<RequestJob,Requests
 
             empId = employeeId;
 
+            itemView.setBackgroundColor(Color.parseColor("#FF018786"));
 
-         /*   Intent intent = new Intent(context, JobDetailsActivity.class);
 
-            intent.putExtra("userId",this.userId);
-            intent.putExtra("jobName", this.jobName.getText());
-            intent.putExtra("date",this.date.getText());
-            intent.putExtra("category",this.category.getText());
-            intent.putExtra("description",this.description.getText());
-            intent.putExtra("latitude",this.latitude);
-            intent.putExtra("longitude",this.longitude);
 
-            context.startActivity(intent);*/
 
 
 

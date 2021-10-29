@@ -6,15 +6,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.projekat.Activities.JobDealDetailsAcitivity;
+import com.example.projekat.Classes.JobDeal;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class JobDealAdapter extends FirebaseRecyclerAdapter<JobDeal,JobDealAdapter.jobDealViewHolder> {
 
@@ -31,18 +30,6 @@ public class JobDealAdapter extends FirebaseRecyclerAdapter<JobDeal,JobDealAdapt
         viewHolder.idUser = model.getSecondUser();
 
 
-
-
-
-
-
-        /*Glide.with(viewHolder.img.getContext())
-        .load(model.getSurl())
-                .placeHolder(R.drawable.common_google_signin_btn_icon_dark)
-                .cirlceCrop()
-                .error(R.drawable.common_google_signin_btn_icon_dark_normal)
-                .into(viewHolder.img);
-*/
     }
 
     @Override

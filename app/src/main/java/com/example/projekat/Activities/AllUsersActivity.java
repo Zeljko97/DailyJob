@@ -1,10 +1,15 @@
-package com.example.projekat;
+package com.example.projekat.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
 
+import com.example.projekat.FragmentAdapter;
+import com.example.projekat.JobsFragment;
+import com.example.projekat.R;
+import com.example.projekat.UserFragment;
+import com.example.projekat.fragmentProfile;
 import com.google.android.material.tabs.TabLayout;
 
 public class AllUsersActivity extends AppCompatActivity {

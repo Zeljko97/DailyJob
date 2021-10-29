@@ -63,7 +63,7 @@
             android:id="@+id/txtEmail"
             android:layout_width="149dp"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="2dp"
+            android:layout_marginLeft="1dp"
             android:layout_toRightOf="@+id/txtProfession"
             android:text="Email"
             android:textColor="@color/black"

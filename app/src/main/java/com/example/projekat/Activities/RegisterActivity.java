@@ -1,4 +1,4 @@
-package com.example.projekat;
+package com.example.projekat.Activities;
 
 import static android.content.ContentValues.TAG;
 
@@ -6,7 +6,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -22,13 +21,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.projekat.Classes.User;
+import com.example.projekat.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -37,8 +37,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
-
-import io.grpc.Context;
 
 
 public class RegisterActivity extends AppCompatActivity {
@@ -140,22 +138,17 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-
-
                             User user = new User(
                                     _name,
                                     _email,
                                     _phone,
                                     _profession,
                                     profileImageUri);
-
                             FirebaseDatabase.getInstance().getReference().child("User")
                                     .child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                                     .setValue(user).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-
-
                                     if(task.isSuccessful()){
                                         handleUpload();
                                         progressBar.setVisibility(View.GONE);
@@ -183,7 +176,7 @@ public class RegisterActivity extends AppCompatActivity {
         haveAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(RegisterActivity.this,LoginActivity.class));
+                startActivity(new Intent(RegisterActivity.this, LoginActivity.class));
             }
         });
 
@@ -225,21 +218,15 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(Uri uri) {
                         Log.d(TAG, "onSuccess: " + uri);
-                        //setUserProfileUrl(uri);
                         String profImgUri;
                         profImgUri=uri.toString();
                         System.out.println("uri");
                         System.out.println(profImgUri);
-
                         DatabaseReference baza = FirebaseDatabase.getInstance().getReference();
                         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-
                         baza.child("User").child(userId).child("profileImageUri").setValue(profImgUri);
-
                         fAuth.signOut();
-
                         startActivity(new Intent(getApplicationContext(), HomePageActivity.class));
-
                     }
                 });
     }

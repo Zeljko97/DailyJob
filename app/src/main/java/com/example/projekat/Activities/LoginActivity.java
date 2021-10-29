@@ -1,4 +1,4 @@
-package com.example.projekat;
+package com.example.projekat.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,16 +13,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.projekat.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.installations.FirebaseInstallations;
 import com.google.firebase.messaging.FirebaseMessaging;
-
-import org.w3c.dom.Text;
 
 
 public class LoginActivity extends AppCompatActivity {
@@ -33,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView register;
     ProgressBar progressBarL;
     TextView resetPassword;
-
     FirebaseAuth fAuth;
     DatabaseReference dRef;
 
@@ -53,12 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         fAuth = FirebaseAuth.getInstance();
         dRef = FirebaseDatabase.getInstance().getReference().child("User");
 
-        //ako je korisnik vec ulogovan
-       /* if(fAuth.getCurrentUser() != null)
-        {
-            startActivity(new Intent(getApplicationContext(),HomePageActivity.class));
-            finish();
-        }*/
 
         //logovanje
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -87,10 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                         if(task.isSuccessful()){
                             Toast.makeText(LoginActivity.this,"Logged in successfuly", Toast.LENGTH_SHORT).show();
                             saveToken();
-
-                            //progressBarL.setVisibility(View.GONE);
-
-                            startActivity(new Intent(getApplicationContext(),HomePageActivity.class));
+                            startActivity(new Intent(getApplicationContext(), HomePageActivity.class));
                         }
                         else {
                             Toast.makeText(LoginActivity.this,"Error " + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
@@ -104,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this,RegisterActivity.class));
+                startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
 
@@ -112,7 +100,7 @@ public class LoginActivity extends AppCompatActivity {
         resetPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this,ResetPasswordActivity.class));
+                startActivity(new Intent(LoginActivity.this, ResetPasswordActivity.class));
             }
         });
     }

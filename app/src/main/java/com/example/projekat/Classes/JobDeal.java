@@ -1,6 +1,4 @@
-package com.example.projekat;
-
-import com.example.projekat.Job;
+package com.example.projekat.Classes;
 
 public class JobDeal {
 
@@ -76,11 +74,7 @@ public class JobDeal {
 
     }
 
-   /* public JobDeal(String firstUser, String secondUser, String jobName){
-        this.firstUser = firstUser;
-        this.secondUser = secondUser;
-        this.jobName = jobName;
-    }*/
+
     public JobDeal(String firstUser, String secondUser, String jobName,Double lat, Double lon,String description){
         this.firstUser = firstUser;
         this.secondUser = secondUser;
@@ -90,9 +84,5 @@ public class JobDeal {
         this.description = description;
     }
 
-  /*  public JobDeal(String firstUser, String secondUser,String key){
-        this.firstUser = firstUser;
-        this.secondUser = secondUser;
-        this.key = key;
-    }*/
+
 }

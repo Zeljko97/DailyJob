@@ -1,4 +1,4 @@
-package com.example.projekat;
+package com.example.projekat.Activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,12 +6,23 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.example.projekat.Classes.JobDeal;
+import com.example.projekat.Classes.JobDealData;
+import com.example.projekat.Classes.RequestJob;
+import com.example.projekat.Classes.RequestJobData;
+import com.example.projekat.Employees;
+import com.example.projekat.Notifications.APIService;
+import com.example.projekat.Notifications.Client;
+import com.example.projekat.Notifications.Data;
+import com.example.projekat.Notifications.MyResponse;
+import com.example.projekat.Notifications.NotificationSender;
+import com.example.projekat.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,14 +32,15 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class JobDetailsActivity extends AppCompatActivity {
 
@@ -58,6 +70,12 @@ public class JobDetailsActivity extends AppCompatActivity {
     String category;
 
     String description11;
+
+    //for notification
+    String title = "You have job request";
+    String message = "";
+    private APIService apiService;
+    String token = "";
 
     @Override
     protected void onDestroy() {
@@ -110,7 +128,7 @@ public class JobDetailsActivity extends AppCompatActivity {
         txtCategory = (TextView) findViewById(R.id.txtCategory);
         txtCategory.setText(category);
         txtUser = (TextView)findViewById(R.id.txtUserId);
-        //txtApp = (TextView)findViewById(R.id.txtApp);
+
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("User").child(id);
 
@@ -124,20 +142,25 @@ public class JobDetailsActivity extends AppCompatActivity {
         btnCancel = (Button)findViewById(R.id.btnDeclineJob);
         btnEmployees = (Button)findViewById(R.id.btnEmployees);
 
+        btnCancel.setVisibility(View.GONE);
 
 
-        //ucitavamo Usera koji je postavio job
+        //notif
+        apiService = Client.getClient("https://fcm.googleapis.com/").create(APIService.class);
+
+
+
+        //učitavamo Usera koji je postavio posao
         databaseReference = (DatabaseReference) FirebaseDatabase.getInstance().getReference().child("User").child(id);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 String displayName = snapshot.child("name").getValue(String.class);
                 txtUser.setText(displayName);
+                token = snapshot.child("device_token").getValue(String.class);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
@@ -145,13 +168,6 @@ public class JobDetailsActivity extends AppCompatActivity {
 
 //pribavljamo job id koji se sklapa izmedju korisnika
 Init();
-
-
-
-
-
-
-
 
 
 //button za prikazivanje  lokacije
@@ -162,7 +178,7 @@ Init();
                 double lat = getIntent().getExtras().getDouble("latitude");
                 double lon = getIntent().getExtras().getDouble("longitude");
 
-                Intent intent = new Intent(getApplicationContext(),MapsActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MapsActivity.class);
                 intent.putExtra("latitude",lat);
                 intent.putExtra("longitude",lon);
                 startActivity(intent);
@@ -205,9 +221,6 @@ Init();
             @Override
             public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                 jobId = snapshot.getKey();
-                ////////////////////////////////////
-
-
                 Query dbRef;
                 dbRef = FirebaseDatabase.getInstance().getReference().child("RequestsJob").orderByChild("jobKey").equalTo(jobId);
 
@@ -217,8 +230,6 @@ Init();
                         //id request job-a
                         String requestJobId = snapshot.getKey();
                         secondUserId = snapshot.child("user").getValue(String.class);
-
-
 
                         requestReference = (DatabaseReference) FirebaseDatabase.getInstance().getReference().child("RequestsJob").child(requestJobId);
                         requestReference.addValueEventListener(new ValueEventListener() {
@@ -264,11 +275,7 @@ Init();
                     ButtonsAction();
                 }
 
-
-                ////////////////////////////////////
                 Toast.makeText(JobDetailsActivity.this, jobId, Toast.LENGTH_SHORT).show();
-
-
             }
 
             @Override
@@ -296,9 +303,6 @@ Init();
 
 
 
-
-
-
     private void LoadJobDeal() {
         jobreference.child(jobId).child("firstUser").addValueEventListener(new ValueEventListener() {
             @Override
@@ -309,8 +313,6 @@ Init();
                 {
                     kreiraoPosaoId = "";
                 }
-
-
                 jobreference.child(jobId).child("secondUser").addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -325,7 +327,6 @@ Init();
                 });
 
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -370,7 +371,6 @@ Init();
     private void CheckUserExistance(String id){
 
         if(!(kreiraoPosaoId.equals(""))){
-
                 //da li je sklopljen posao
                 if (kreiraoPosaoId.equals(firebaseUser.getUid().toString())) {
                     CurrentState = "jobs";
@@ -386,50 +386,30 @@ Init();
                         btnCancel.setText("Cancel job");
                         btnCancel.setVisibility(View.VISIBLE);
                     }
-
                 }
         }
-
-
         ///da li smo poslali zahtev
         if(secondUserId  != null) {
             if (!(secondUserId.equals(""))) {
                 if (firebaseUser.getUid().equals(secondUserId)) {
-
-
                     requestReference.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             String user = snapshot.child("user").getValue(String.class);
                             if(user != null) {
                                 if (user.equals(firebaseUser.getUid())) {
-
-                                    //  String status = snapshot.child("status").getValue(String.class);
-                                    //  if (status.equals("pending")) {
                                     CurrentState = "I_sent_pending";
                                     btnApply.setText("Cancel Job Request");
                                     btnCancel.setVisibility(View.GONE);
-
-                                    //  }
-                                    //   if (status.equals("decline")) {
-                                    //       CurrentState = "I_sent_decline";
-                                    //      btnApply.setText("Cancel Job Request");
-                                    //      btnCancel.setVisibility(View.GONE);
-
-                                    //  }
-
                                 }
                             }
                         }
-
                         @Override
                         public void onCancelled(@NonNull DatabaseError error) {
-
                         }
                     });
                 } else {
                     //menjamo id
-
                     if (firebaseUser.getUid().equals(id)) {
 
                         btnEmployees.setVisibility(View.VISIBLE);
@@ -437,7 +417,7 @@ Init();
                             @Override
                             public void onClick(View view) {
 
-                                Intent intent = new Intent(JobDetailsActivity.this,Employees.class);
+                                Intent intent = new Intent(JobDetailsActivity.this, Employees.class);
                                 intent.putExtra("jobId",jobId);
                                 intent.putExtra("jobName", jobName);
                                 intent.putExtra("date",date);
@@ -460,23 +440,7 @@ Init();
                                 btnCancel.setText("Decline job Request");
                                 btnApply.setVisibility(View.VISIBLE);
                                 btnCancel.setVisibility(View.VISIBLE);
-
                             }
-
-                          /*  requestReference.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    //String user = snapshot.getValue(String.class);
-                                    String user = getIntent().getExtras().getString("employee");
-                                    for(DataSnapshot dataSnapshot : snapshot)
-
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });*/
                         }
                     }
                 }
@@ -492,18 +456,7 @@ Init();
     }
 
 
-
-
-
-
-    ////////////////////////////////////////
-
-
-
-
     private void PerformAction(String id){
-
-
         //ako nije poslat nikakav zahtev
         if(CurrentState.equals("nothing_happened")){
             HashMap hashMap = new HashMap();
@@ -516,14 +469,14 @@ Init();
             btnApply.setText("Cancel Job Request");
             CurrentState = "I_sent_pending";
 
-          Init();
-         //   requestReference.child("status").setValue("pending");
+            //send notification
+            sendNotifications(token,title,message);
+             Init();
             return;
 
         }
 
         //ako je zahtev poslat, sad moze samo da se izbrise
-
         if(CurrentState.equals("I_sent_pending") || CurrentState.equals("I_sent_decline")) {
             requestReference.removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
                 @Override
@@ -536,13 +489,10 @@ Init();
             });
         }
 
-        //ako nam je stigao zahtev, prihvatamo ili odbijamo
-
+        //ako je stigao zahtev, prihvatamo ili odbijamo
         if(CurrentState.equals("he_sent_pending")){
-
             if(firebaseUser.getUid().equals(id)){
                 String nameJob = txtJobName.getText().toString();
-
                 DatabaseReference dRef = FirebaseDatabase.getInstance().getReference().child("Job").child(jobId);
                 dRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -560,9 +510,6 @@ Init();
                         btnApply.setText("Send SMS");
                         btnCancel.setText("Cancel job");
                         btnCancel.setVisibility(View.VISIBLE);
-
-
-                        //requestReference.removeValue();
 
                         Query req = FirebaseDatabase.getInstance().getReference().child("RequestsJob").orderByChild("jobKey").equalTo(getIntent().getExtras().getString("jobId"));
                         req.addChildEventListener(new ChildEventListener() {
@@ -609,13 +556,10 @@ Init();
 
 
                         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Job").child(jobId);
-     /*   Toast.makeText(JobDetailsActivity.this,nameJob,Toast.LENGTH_SHORT).show();
-        Toast.makeText(JobDetailsActivity.this,String.valueOf(latit),Toast.LENGTH_SHORT).show();
-        Toast.makeText(JobDetailsActivity.this,String.valueOf(longit),Toast.LENGTH_SHORT).show();
-        Toast.makeText(JobDetailsActivity.this,desc,Toast.LENGTH_SHORT).show();*/
+
                         dbref.removeValue();
 
-                        Intent intent = new Intent(JobDetailsActivity.this,JobDealDetailsAcitivity.class);
+                        Intent intent = new Intent(JobDetailsActivity.this, JobDealDetailsAcitivity.class);
                         intent.putExtra("jobName",nameJob);
                         intent.putExtra("employer",id);
                         intent.putExtra("description", description11);
@@ -624,6 +568,9 @@ Init();
                         startActivity(intent);
 
                         showJobDealDetails(nameJob, latitude, longitude, description11);
+
+
+
                     }
 
                     @Override
@@ -632,6 +579,7 @@ Init();
                     }
                 });
             }
+
 
 
            /* requestReference.addValueEventListener(new ValueEventListener() {
@@ -684,16 +632,14 @@ Init();
 
 
 
+
     }
 
 
     //kada je posao prihvacen
     private void showJobDealDetails(String nameJob,double latit, double longit, String desc){
         DatabaseReference dbref = FirebaseDatabase.getInstance().getReference().child("Job").child(jobId);
-     /*   Toast.makeText(JobDetailsActivity.this,nameJob,Toast.LENGTH_SHORT).show();
-        Toast.makeText(JobDetailsActivity.this,String.valueOf(latit),Toast.LENGTH_SHORT).show();
-        Toast.makeText(JobDetailsActivity.this,String.valueOf(longit),Toast.LENGTH_SHORT).show();
-        Toast.makeText(JobDetailsActivity.this,desc,Toast.LENGTH_SHORT).show();*/
+
         dbref.removeValue();
 
         Intent intent = new Intent(JobDetailsActivity.this,JobDealDetailsAcitivity.class);
@@ -706,4 +652,26 @@ Init();
     }
 
 
-}
+    public void sendNotifications(String usertoken, String title, String message) {
+        Data data = new Data(title, message);
+        NotificationSender sender = new NotificationSender(data, usertoken);
+        apiService.sendNotifcation(sender).enqueue(new Callback<MyResponse>() {
+            @Override
+            public void onResponse(Call<MyResponse> call, Response<MyResponse> response) {
+                if (response.code() == 200) {
+                    if (response.body().success != 1) {
+                        Toast.makeText(JobDetailsActivity.this, "Failed ", Toast.LENGTH_LONG);
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MyResponse> call, Throwable t) {
+
+            }
+        });
+    }
+
+
+
+    }

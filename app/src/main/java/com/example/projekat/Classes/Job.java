@@ -1,4 +1,4 @@
-package com.example.projekat;
+package com.example.projekat.Classes;
 
 public class Job {
 
@@ -10,11 +10,8 @@ public class Job {
     public String date;
     public String key; //atribut key ce biti dodeljen svakom smestenom objektu od strane Firebase baze, zbog toga ga nije potrebno dodavati u bazu podataka prilikom snimanja
 
-
     public Job(){
-
     }
-
     public Job(String jobName, String category, String description,  String date){
         this.jobName = jobName;
         this.category = category;
@@ -22,8 +19,6 @@ public class Job {
         this.longitude = 0;
         this.latitude = 0;
         this.date = date;
-
-
     }
     public Job(String jobName, String category, String description, String key,double longitude, double latitude, String date){
         this.jobName = jobName;
@@ -33,9 +28,7 @@ public class Job {
         this.latitude = latitude;
         this.date = date;
         this.key = key;
-
     }
-
     public String getJobName(){
         return this.jobName;
     }

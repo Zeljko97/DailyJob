@@ -1,4 +1,4 @@
-package com.example.projekat;
+package com.example.projekat.Classes;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,19 +13,17 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import kotlinx.coroutines.Job;
+public class RequestJobData {
 
-public class JobDealData {
-
-    private ArrayList<JobDeal> jobsDeal;
-    private HashMap<String, Integer> jobsDealKeyIndexMapping;
+    private ArrayList<RequestJob> requests;
+    private HashMap<String,Integer> requestsKeyIndexMapping;
     private DatabaseReference database;
-    private static final String FIREBASE_CHILD = "JobDeal";
+    private static final String FIREBASE_CHILD = "RequestsJob";
 
-    private JobDealData(){
-        jobsDeal = new ArrayList<>();
+    private RequestJobData(){
+        requests = new ArrayList<>();
 
-        jobsDealKeyIndexMapping = new HashMap<String,Integer>();
+        requestsKeyIndexMapping = new HashMap<String,Integer>();
         database = FirebaseDatabase.getInstance().getReference();
         database.child(FIREBASE_CHILD).addChildEventListener(childEventListener);
         database.child(FIREBASE_CHILD).addListenerForSingleValueEvent(parentEventListener);
@@ -43,8 +41,6 @@ public class JobDealData {
 
         }
     };
-
-
 
     ChildEventListener childEventListener = new ChildEventListener() {
         @Override
@@ -73,45 +69,42 @@ public class JobDealData {
         }
     };
 
-    public void addNewJobDeal(JobDeal jobDeal,String key){
-        //String key = database.push().getKey();
 
-        jobsDeal.add(jobDeal);
-        jobsDealKeyIndexMapping.put(key,jobsDeal.size() - 1);
-        database.child(FIREBASE_CHILD).child(key).setValue(jobDeal);
+    public void addNewRequest(RequestJob requestJob){
+        String key = database.push().getKey();
 
+        requests.add(requestJob);
+        requestsKeyIndexMapping.put(key,requests.size()-1);
+        database.child(FIREBASE_CHILD).child(key).setValue(requestJob);
+        requestJob.key = key;
+    }
+    public void deleteRequest(int index){
+        database.child(FIREBASE_CHILD).child(requests.get(index).key).removeValue();
+        requests.remove(index);
+        recreateKeyIndexMapping();
     }
 
-    public void deleteJobDeal(int index){
-        database.child(FIREBASE_CHILD).child(jobsDeal.get(index).key).removeValue();
-        jobsDeal.remove(index);
+    private void recreateKeyIndexMapping() {
 
-        recreateKeyIndexMappind();
-    }
-
-    private void recreateKeyIndexMappind() {
-
-        jobsDealKeyIndexMapping.clear();
-        for(int i = 0;i<jobsDeal.size();i++){
-            jobsDealKeyIndexMapping.put(jobsDeal.get(i).key,i);
+        requestsKeyIndexMapping.clear();
+        for(int i = 0;i<requests.size();i++){
+            requestsKeyIndexMapping.put(requests.get(i).key,i);
         }
     }
 
 
-
     private static class SingletonHolder{
-        public static final JobDealData instance = new JobDealData();
-
-
+        public static final RequestJobData instance = new RequestJobData();
     }
 
-    public static JobDealData getInstance(){
+    public static RequestJobData getInstance(){
         return SingletonHolder.instance;
     }
-    public ArrayList<JobDeal> getJobsDeal(){
-        return jobsDeal;
+    public ArrayList<RequestJob> getRequests(){
+        return requests;
     }
-    public JobDeal getJobDeal(int index){
-        return jobsDeal.get(index);
+    public RequestJob getRequestJob(int index){
+        return requests.get(index);
     }
+
 }

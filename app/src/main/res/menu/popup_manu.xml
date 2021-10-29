@@ -6,8 +6,7 @@
 
     <item android:id="@+id/itemProfile"
         android:title="Profile"/>
-    <item android:id="@+id/itemJobs"
-        android:title="Jobs"/>
+
 
     <item android:id="@+id/itemLogout"
         android:title="Logout"/>

@@ -1,4 +1,4 @@
-package com.example.projekat;
+package com.example.projekat.Classes;
 
 public class MainModel {
 

@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.projekat.Activities.JobDetailsActivity;
+import com.example.projekat.Classes.RequestJob;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -18,7 +20,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class Employees extends AppCompatActivity {
@@ -87,7 +88,7 @@ public class Employees extends AppCompatActivity {
 mainAdapter.startListening();
                 String employee = mainAdapter.empId;
 
-                Intent intent = new Intent(Employees.this,JobDetailsActivity.class);
+                Intent intent = new Intent(Employees.this, JobDetailsActivity.class);
                 intent.putExtra("jobId",jobId);
                 intent.putExtra("jobName", jobName);
                 intent.putExtra("date",date);

@@ -1,6 +1,4 @@
-package com.example.projekat;
-
-import android.media.MediaParser;
+package com.example.projekat.Classes;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -25,7 +23,7 @@ public class JobData {
     private JobData(){
         jobs = new ArrayList<>();
         //da bi bila dodata podrska za rad sa Firebase bazom, potrebno je mapiranje razlicitih domena kljuceva.
-        //Firebasse baza svakom objektu dodeljuje kljuc tipa String, koja zavisi od vremena dodavanja objekta.
+        //Firebase baza svakom objektu dodeljuje kljuc tipa String, koja zavisi od vremena dodavanja objekta.
         //Ovo mapiranje je potrebno kako bi moglo da se pristupi odgovarajucem elementu na osnovu indeksa u slucaju kada je poznat samo kljuc
         jobsKeyIndexMapping = new HashMap<String, Integer>();
         database = FirebaseDatabase.getInstance().getReference();
@@ -41,39 +39,27 @@ public class JobData {
     ValueEventListener parentEventListener = new ValueEventListener() {
         @Override
         public void onDataChange(@NonNull DataSnapshot snapshot) {
-
         }
-
         @Override
         public void onCancelled(@NonNull DatabaseError error) {
-
         }
     };
 
     ChildEventListener childEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
         }
-
         @Override
         public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
         }
-
         @Override
         public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
         }
-
         @Override
         public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-
         }
-
         @Override
         public void onCancelled(@NonNull DatabaseError error) {
-
         }
     };
 
@@ -81,13 +67,11 @@ public class JobData {
         String key = database.push().getKey();
         //Prvo se od od Firebase baze podataka pribavi kljuc, koji ce biti dodeljen elementu
         //postaviti odgovarajuci atribut key i dodati par kljuc-indeks u HashMap a zatim dodati objekat u bazu
-
         jobs.add(job);
         jobsKeyIndexMapping.put(key,jobs.size()-1);
         database.child(FIREBASE_CHILD).child(key).setValue(job);
         job.key = key;
     }
-
     public void deleteJob(int index){
         database.child(FIREBASE_CHILD).child(jobs.get(index).key).removeValue();
         jobs.remove(index);
